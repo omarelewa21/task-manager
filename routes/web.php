@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('dashboard', 'dashboard')
+Route::resource('tasks', TaskController::class)->except([
+    'show', 'edit'
+])->middleware(['auth', 'verified']);
+
+Route::get('dashboard', [TaskController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
@@ -23,6 +28,4 @@ Route::view('profile', 'profile')
 
 require __DIR__.'/auth.php';
 
-Route::fallback(function () {
-    return redirect()->route('dashboard');
-});
+Route::fallback(fn () => redirect()->route('dashboard'));
