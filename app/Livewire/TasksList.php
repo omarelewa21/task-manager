@@ -12,7 +12,10 @@ class TasksList extends Component
 
     public function mount()
     {
-        $this->projects = auth()->user()->projects;
+        $this->projects = auth()->user()
+            ->projects()
+            ->has('tasks')
+            ->get();
     }
 
     public function render()
@@ -24,5 +27,11 @@ class TasksList extends Component
         foreach($tasks as $task) {
             Task::whereId($task['value'])->update(['priority' => $task['order']]);
         }
+    }
+
+    public function deleteTask(int $taskId) {
+        Task::whereId($taskId)->delete();
+        $this->mount();
+        $this->render();
     }
 }
