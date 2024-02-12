@@ -11,6 +11,14 @@ class Project extends Model
 
     protected $fillable = ['name', 'user_id'];
 
+    public static function findOrCreateForUser($name, $user)
+    {
+        return static::firstOrCreate([
+            'name' => $name,
+            'user_id' => $user->id,
+        ]);
+    }
+
     public function tasks()
     {
         return $this->hasMany(Task::class)->orderBy('priority');
