@@ -4,11 +4,19 @@ namespace App\Livewire;
 
 use App\Models\Task;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class TasksList extends Component
 {
     public Collection $projects;
+
+    #[On('refresh-tasks-list')]
+    public function refreshTasksList()
+    {
+        $this->mount();
+        $this->render();
+    }
 
     public function mount()
     {

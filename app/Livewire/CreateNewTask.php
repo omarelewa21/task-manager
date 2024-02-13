@@ -32,7 +32,8 @@ class CreateNewTask extends ModalComponent
             'priority' => $project->tasks->count() + 1,
         ]);
  
-        return $this->redirect('dashboard');
+        $this->dispatch('refresh-tasks-list');
+        $this->closeModal();
     }
 
     public function render()
