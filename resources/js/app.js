@@ -1,8 +1,7 @@
 import './bootstrap';
 import 'livewire-sortable' 
 import Alpine from 'alpinejs'
+import focus from '@alpinejs/focus'
 
 window.Alpine = Alpine
-window.onload = function () {
-    Alpine.start()
-}
+Alpine.plugin(focus)
