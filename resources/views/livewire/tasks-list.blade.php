@@ -2,7 +2,7 @@
 
     <div class="flex flex-row justify-between">
         <div class="flex flex-row content-center">
-            <input type="text" wire:model="search" class="form-control border rounded w-64" placeholder="Search">
+            <input type="text" wire:model.live="search" class="form-control border rounded w-64" placeholder="Search">
             <span class="relative right-8 top-2">
                 <x-icons.search />
             </span>
@@ -28,7 +28,7 @@
                         </div>
                         
                         <div class="flex flex-row content-center">
-                            <span wire:click="editTask({{ $task->id }})" class="cursor-pointer ml-2">
+                            <span wire:click="$dispatch('openModal', { component: 'edit-task', arguments: {task: {{$task->id}}} })" class="cursor-pointer ml-2">
                                 <x-icons.edit />
                             </span>
                             <span wire:click="deleteTask({{ $task->id }})" class="cursor-pointer ml-2">

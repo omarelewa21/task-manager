@@ -3,13 +3,14 @@
 namespace App\Livewire;
 
 use App\Models\Task;
-use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\Attributes\Url;
 
 class TasksList extends Component
 {
-    public Collection $projects;
+    #[Url]
+    public $search = '';
 
     #[On('refresh-tasks-list')]
     public function refreshTasksList()
@@ -18,17 +19,11 @@ class TasksList extends Component
         $this->render();
     }
 
-    public function mount()
-    {
-        $this->projects = auth()->user()
-            ->projects()
-            ->has('tasks')
-            ->get();
-    }
-
     public function render()
     {
-        return view('livewire.tasks-list');
+        return view('livewire.tasks-list', [
+            'projects'  => $this->getProjects()
+        ]);
     }
 
     public function updateTaskOrder(array $tasks) {
@@ -39,7 +34,17 @@ class TasksList extends Component
 
     public function deleteTask(int $taskId) {
         Task::whereId($taskId)->delete();
-        $this->mount();
         $this->render();
+    }
+
+    public function getProjects()
+    {
+        return auth()->user()->projects()
+            ->join('tasks', 'tasks.project_id', 'projects.id')
+            ->search($this->search)
+            ->select('projects.*')
+            ->distinct('projects.id')
+            ->with('tasks')
+            ->get();
     }
 }
