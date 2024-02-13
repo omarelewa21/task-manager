@@ -10,16 +10,6 @@ class Project extends Model
 
     protected $fillable = ['name', 'user_id'];
 
-    public function scopeSearch($query, $search='')
-    {
-        $query->when(
-            !empty(trim($search)),
-            fn($query) => 
-                $query->where("projects.name", 'like', "%$search%")
-                    ->orWhere('tasks.name', 'like', "%$search%")
-        );
-    }
-
     public static function findOrCreateForUser($name, $user)
     {
         return static::firstOrCreate([

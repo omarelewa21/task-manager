@@ -38,12 +38,15 @@ class TasksList extends Component
 
     public function getProjects()
     {
-        return auth()->user()->projects()
-            ->join('tasks', 'tasks.project_id', 'projects.id')
-            ->search($this->search)
-            ->select('projects.*')
-            ->distinct('projects.id')
-            ->with('tasks')
-            ->get();
+        return auth()->user()
+            ->projects()
+            ->with(['tasks' => fn($query) =>
+                $query->when(
+                    $this->search,
+                    fn($query) => $query->where('name', 'like', '%'.$this->search.'%')
+                )
+            ])
+            ->get()
+            ->filter(fn($project) => $project->tasks->isNotEmpty());
     }
 }
