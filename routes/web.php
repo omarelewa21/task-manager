@@ -14,11 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('tasks', TaskController::class)->except([
-    'show', 'edit'
-])->middleware(['auth', 'verified']);
-
-Route::get('dashboard', [TaskController::class, 'index'])
+Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
