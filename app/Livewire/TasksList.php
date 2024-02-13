@@ -15,7 +15,6 @@ class TasksList extends Component
     #[On('refresh-tasks-list')]
     public function refreshTasksList()
     {
-        $this->mount();
         $this->render();
     }
 
